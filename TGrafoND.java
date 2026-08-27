@@ -5,7 +5,7 @@ public class TGrafoND {
 	private	int m; // quantidade de arestas
 	private	int adj[][]; //matriz de adjacência
 	// Métodos Públicos
-	public TGrafo( int n) {  // construtor
+	public TGrafoND( int n) {  // construtor
 	    this.n = n;
 	    // No início dos tempos não há arestas
 	    this.m = 0; 
