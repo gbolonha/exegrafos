@@ -5,27 +5,29 @@ public class TGrafo {
 	// Atributos Privados
 	private	int n; // quantidade de vértices
 	private	int m; // quantidade de arestas
-	private	int adj[][]; //matriz de adjacência
+	private	float adj[][]; //matriz de adjacência
 	// Métodos Públicos
+	//exe10
 	public TGrafo( int n) {  // construtor
 	    this.n = n;
 	    // No início dos tempos não há arestas
 	    this.m = 0; 
 	    // alocação da matriz do TGrafo
-	    this.adj = new int [n][n];
+	    this.adj = new float [n][n];
 
 	    // Inicia a matriz com zeros
 		for(int i = 0; i< n; i++)
 			for(int j = 0; j< n; j++)
-				this.adj[i][j]=0;	
+				this.adj[i][j]=float.POSITIVE_INFINITY;	
 	}
 
 	// Insere uma aresta no Grafo tal que
 	// v é adjacente a w
-	public void insereA(int v, int w) {
+	
+	public void insereA(int v, int w,float peso) {
 	    // testa se nao temos a aresta
-	    if(adj[v][w] == 0 ){
-	        adj[v][w] = 1;
+	    if(adj[v][w] == float.POSITIVE_INFINITY){
+	        adj[v][w] = peso;
 	        m++; // atualiza qtd arestas
 	    }
 	}
@@ -79,5 +81,47 @@ public class TGrafo {
 	{
 		return outDegree(v)+inDegree(v)
 	}
+	//exe4
+	public int isFonte(int v)
+	{
+		return (outDegree(v)>0 && inDegree(v)==0) ? 1:0
+	}
+	//exe5
+	public int isSorveduro(int t)
+	{
+		return (inDegree(v)>0 && outDegree(v)==0) ? 1:0
+	}
+	//exe6
+	public int isSimetrico(TGrafo grafo)
+	{
+		for (int i=0;i<n;i++)
+		{
+			for (int j=0;j<n;j++)
+			{
+				if (ajd[i][j]!=adj[j][i])
+				{
+					return 0;
+				}
+			}
+		}
+		return 1
+	}
+	//exe7
+	public static TGrafo lerArquivo(String nomeArq)  
+	{
+    Scanner sc = new Scanner(new File(nomeArq));
+    int V = sc.nextInt();
+    int A = sc.nextInt();
+    TGrafo g = new TGrafo(V);
+    for(int i=0; i<A; i++)
+	{
+        int v = sc.nextInt();
+        int w = sc.nextInt();
+        g.insereA(v, w);
+    }
+    sc.close();
+    return g;
+	}
 	
+
 }
