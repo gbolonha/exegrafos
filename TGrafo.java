@@ -53,4 +53,31 @@ public class TGrafo {
 	    }
 	    System.out.println("\n\nfim da impressao do grafo." );
 	}
+	// exe1
+	public int inDegree(int v)
+	{
+		int grau=0;
+		for (int i=0;i<n;i++)
+			{
+				if(adj[v][i]==1) grau++;
+			}
+		return grau
+	}
+	//exe2
+
+	public int outDegree(int v)
+	{
+		int grau=0;
+		for (int i=0;i<n;i++)
+			{
+				if(adj[i][v]==1) grau++;
+			}
+		return grau
+	}
+	//exe3
+	public int degree(int v)
+	{
+		return outDegree(v)+inDegree(v)
+	}
+	
 }
