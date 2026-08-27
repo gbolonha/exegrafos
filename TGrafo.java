@@ -1,3 +1,7 @@
+import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
+
 
 
 //definição de uma estrutura Matriz de Adjacência para armezanar um grafo
@@ -18,7 +22,7 @@ public class TGrafo {
 	    // Inicia a matriz com zeros
 		for(int i = 0; i< n; i++)
 			for(int j = 0; j< n; j++)
-				this.adj[i][j]=float.POSITIVE_INFINITY;	
+				this.adj[i][j]=Float.POSITIVE_INFINITY;	
 	}
 
 	// Insere uma aresta no Grafo tal que
@@ -26,7 +30,7 @@ public class TGrafo {
 	
 	public void insereA(int v, int w,float peso) {
 	    // testa se nao temos a aresta
-	    if(adj[v][w] == float.POSITIVE_INFINITY){
+	    if(adj[v][w] == Float.POSITIVE_INFINITY){
 	        adj[v][w] = peso;
 	        m++; // atualiza qtd arestas
 	    }
@@ -35,8 +39,8 @@ public class TGrafo {
 	// remove uma aresta v->w do Grafo	
 	public void removeA(int v, int w) {
 	    // testa se temos a aresta
-	    if(adj[v][w] == 1 ){
-	        adj[v][w] = 0;
+	    if(adj[v][w] != Float.POSITIVE_INFINITY){
+	        adj[v][w] = Float.POSITIVE_INFINITY;
 	        m--; // atualiza qtd arestas
 	    }
 	}
@@ -49,9 +53,9 @@ public class TGrafo {
 	    for( int i=0; i < n; i++){
 	    	System.out.print("\n");
 	        for( int w=0; w < n; w++)
-	            if(adj[i][w] == 1)
-	            	System.out.print("Adj[" + i + "," + w + "]= 1" + " ");
-	            else System.out.print("Adj[" + i + "," + w + "]= 0" + " ");
+	            if(adj[i][w] !=Float.POSITIVE_INFINITY)
+	            	System.out.print("Adj[" + i + "," + w + "]= " + adj[i][w] + " ");
+	            else System.out.print("Adj[" + i + "," + w + "]= inf" + " ");
 	    }
 	    System.out.println("\n\nfim da impressao do grafo." );
 	}
@@ -61,9 +65,9 @@ public class TGrafo {
 		int grau=0;
 		for (int i=0;i<n;i++)
 			{
-				if(adj[v][i]==1) grau++;
+				if(adj[i][v]!=Float.POSITIVE_INFINITY) grau++;
 			}
-		return grau
+		return grau;
 	}
 	//exe2
 
@@ -72,42 +76,42 @@ public class TGrafo {
 		int grau=0;
 		for (int i=0;i<n;i++)
 			{
-				if(adj[i][v]==1) grau++;
+				if(adj[v][i]!=Float.POSITIVE_INFINITY) grau++;
 			}
-		return grau
+		return grau;
 	}
 	//exe3
 	public int degree(int v)
 	{
-		return outDegree(v)+inDegree(v)
+		return outDegree(v)+inDegree(v);
 	}
 	//exe4
 	public int isFonte(int v)
 	{
-		return (outDegree(v)>0 && inDegree(v)==0) ? 1:0
+		return (outDegree(v)>0 && inDegree(v)==0) ? 1:0;
 	}
 	//exe5
-	public int isSorveduro(int t)
+	public int isSorveduro(int v)
 	{
-		return (inDegree(v)>0 && outDegree(v)==0) ? 1:0
+		return (inDegree(v)>0 && outDegree(v)==0) ? 1:0;
 	}
 	//exe6
-	public int isSimetrico(TGrafo grafo)
+	public int isSimetrico()
 	{
 		for (int i=0;i<n;i++)
 		{
 			for (int j=0;j<n;j++)
 			{
-				if (ajd[i][j]!=adj[j][i])
+				if (adj[i][j]!=adj[j][i])
 				{
 					return 0;
 				}
 			}
 		}
-		return 1
+		return 1;
 	}
 	//exe7
-	public static TGrafo lerArquivo(String nomeArq)  
+	public static TGrafo lerArquivo(String nomeArq) throws FileNotFoundException
 	{
     Scanner sc = new Scanner(new File(nomeArq));
     int V = sc.nextInt();
@@ -117,7 +121,8 @@ public class TGrafo {
 	{
         int v = sc.nextInt();
         int w = sc.nextInt();
-        g.insereA(v, w);
+        float peso = sc.nextFloat();
+        g.insereA(v, w,peso);
     }
     sc.close();
     return g;
