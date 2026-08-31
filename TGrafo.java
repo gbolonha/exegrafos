@@ -130,3 +130,77 @@ public class TGrafo {
 	
 
 }
+
+//exe11
+
+//exe11 
+public void removeVertice(int v) {
+    int novoN = n - 1;
+    float novaAdj[][] = new float[novoN][novoN];
+
+    for(int i=0; i<novoN; i++)
+        for(int j=0; j<novoN; j++)
+		{
+			novaAdj[i][j] = Float.POSITIVE_INFINITY;
+		}
+            
+
+    int li = 0;
+    for(int i=0; i<n; i++)
+	{
+        if(i == v) continue;
+        int lj = 0;
+        for(int j=0; j<n; j++){
+            if(j == v) continue;
+            novaAdj[li][lj] = adj[i][j];
+            lj++;
+        }
+        li++;
+    }
+
+    adj = novaAdj;
+    n = novoN;
+
+    m = 0;
+    for(int i=0; i<n; i++)
+	{
+		for(int j=0; j<n; j++)
+		{
+			if(adj[i][j] != Float.POSITIVE_INFINITY) 
+			{
+				m++;
+			}
+		}
+           
+	}
+       
+}
+
+
+//exe13: 
+public int isCompleto() 
+{
+    for(int i=0; i<n; i++)
+	{
+        for(int j=0; j<n; j++)
+		{
+            if(i != j && (adj[j][i]==Float.POSITIVE_INFINITY || adj[i][j] == Float.POSITIVE_INFINITY)){
+                return 0; 
+            }
+        }
+    }
+    return 1; 
+}
+
+//exe14
+public TGrafo complementar() {
+    TGrafo comp = new TGrafo(n);
+    for(int i=0; i<n; i++){
+        for(int j=0; j<n; j++){
+            if(i != j && adj[i][j] == Float.POSITIVE_INFINITY){
+                comp.insereA(i, j, 1); 
+            }
+        }
+    }
+    return comp;
+}
