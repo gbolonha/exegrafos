@@ -1,15 +1,15 @@
-//definição de uma estrutura Matriz de Adjacência para armazenar um grafo NÃO dirigido
+//definição de uma estrutura Matriz de Adjacência para armezanar um grafo
 public class TGrafoND {
 	// Atributos Privados
 	private	int n; // quantidade de vértices
 	private	int m; // quantidade de arestas
 	private	int adj[][]; //matriz de adjacência
 	// Métodos Públicos
-	public TGrafoND( int n) {  // construtor (nome igual ao da classe!)
+	public TGrafoND( int n) {  // construtor
 	    this.n = n;
 	    // No início dos tempos não há arestas
 	    this.m = 0; 
-	    // alocação da matriz do TGrafoND
+	    // alocação da matriz do TGrafo
 	    this.adj = new int [n][n];
 
 	    // Inicia a matriz com zeros
@@ -18,30 +18,29 @@ public class TGrafoND {
 				this.adj[i][j]=0;	
 	}
 
-	// exe8: Insere uma aresta NÃO dirigida entre v e w
-	// (marca os dois sentidos, mas conta só 1 aresta)
+	// Insere uma aresta no Grafo tal que
+	// v é adjacente a w
 	public void insereA(int v, int w) {
-	    // testa se nao temos a aresta (basta checar um dos sentidos,
-	    // já que a matriz é sempre mantida simétrica)
-	    if(adj[v][w] == 0 ){
+	    // testa se nao temos a aresta
+	    if(adj[v][w] == 0 && adj[w][v]==0){
+			adj[w][v] = 1;
 	        adj[v][w] = 1;
-	        adj[w][v] = 1;
-	        m++; // atualiza qtd arestas (uma só, mesmo marcando 2 células)
+	        m++; // atualiza qtd arestas
 	    }
 	}
 	
-	// exe8: remove a aresta NÃO dirigida entre v e w
+	// remove uma aresta v->w do Grafo	
 	public void removeA(int v, int w) {
 	    // testa se temos a aresta
-	    if(adj[v][w] == 1 ){
+	    if(adj[v][w] == 1 && adj[w][v]==1){
+			adj[w][v] = 0;
 	        adj[v][w] = 0;
-	        adj[w][v] = 0;
 	        m--; // atualiza qtd arestas
 	    }
 	}
-	// exe8: Apresenta o Grafo contendo
+	// Apresenta o Grafo contendo
 	// número de vértices, arestas
-	// e a matriz de adjacência obtida (sempre simétrica)
+	// e a matriz de adjacência obtida	
 	public void show() {
 	    System.out.println("n: " + n );
 	    System.out.println("m: " + m );
@@ -52,6 +51,77 @@ public class TGrafoND {
 	            	System.out.print("Adj[" + i + "," + w + "]= 1" + " ");
 	            else System.out.print("Adj[" + i + "," + w + "]= 0" + " ");
 	    }
-	    System.out.println("\n\nfim da impressao do grafo (nao dirigido)." );
+	    System.out.println("\n\nfim da impressao do grafo." );
 	}
+
+	//exe9
+	public int degree(int v)
+	{
+		int grau = 0;
+		for(int j=0; j<n; j++)
+		{
+			if(adj[v][j] == 1)
+			{
+				grau++;
+			}
+		}
+		return grau;
+	}
+}
+
+//exe11
+public void removeVertice(int v) {
+    int novoN = n - 1;
+    int novaAdj[][] = new int[novoN][novoN]; // já nasce com 0 = sem aresta
+
+    int li = 0;
+    for(int i=0; i<n; i++){
+        if(i == v) continue;
+        int lj = 0;
+        for(int j=0; j<n; j++){
+            if(j == v) continue;
+            novaAdj[li][lj] = adj[i][j];
+            lj++;
+        }
+        li++;
+    }
+
+    adj = novaAdj;
+    n = novoN;
+
+    int totalMarcado = 0;
+    for(int i=0; i<n; i++)
+        for(int j=0; j<n; j++)
+            if(adj[i][j] == 1) totalMarcado++;
+    m = totalMarcado / 2; // cada aresta aparece 2x na matriz simétrica
+}
+
+//exe12
+
+public int isCompleto() {
+    for(int i=0; i<n; i++)
+	{
+        for(int j=0; j<n; j++)
+		{
+            if(i != j && adj[i][j] == 0)
+			{
+                return 0; 
+            }
+        }
+    }
+    return 1; 
+}
+
+
+//exe14:  
+public TGrafoND complementar() {
+    TGrafoND comp = new TGrafoND(n);
+    for(int i=0; i<n; i++){
+        for(int j=0; j<n; j++){
+            if(i != j && adj[i][j] == 0){
+                comp.insereA(i, j);
+            }
+        }
+    }
+    return comp;
 }
