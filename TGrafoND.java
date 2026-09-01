@@ -67,61 +67,86 @@ public class TGrafoND {
 		}
 		return grau;
 	}
-}
 
-//exe11
-public void removeVertice(int v) {
-    int novoN = n - 1;
-    int novaAdj[][] = new int[novoN][novoN]; // já nasce com 0 = sem aresta
 
-    int li = 0;
-    for(int i=0; i<n; i++){
-        if(i == v) continue;
-        int lj = 0;
-        for(int j=0; j<n; j++){
-            if(j == v) continue;
-            novaAdj[li][lj] = adj[i][j];
-            lj++;
+    //exe11
+    public void removeVertice(int v) {
+        int novoN = n - 1;
+        int novaAdj[][] = new int[novoN][novoN]; // já nasce com 0 = sem aresta
+
+        int li = 0;
+        for(int i=0; i<n; i++){
+            if(i == v) continue;
+            int lj = 0;
+            for(int j=0; j<n; j++){
+                if(j == v) continue;
+                novaAdj[li][lj] = adj[i][j];
+                lj++;
+            }
+            li++;
         }
-        li++;
+
+        adj = novaAdj;
+        n = novoN;
+
+        int totalMarcado = 0;
+        for(int i=0; i<n; i++)
+            for(int j=0; j<n; j++)
+                if(adj[i][j] == 1) totalMarcado++;
+        m = totalMarcado / 2; // cada aresta aparece 2x na matriz simétrica
     }
 
-    adj = novaAdj;
-    n = novoN;
+    //exe12
 
-    int totalMarcado = 0;
-    for(int i=0; i<n; i++)
-        for(int j=0; j<n; j++)
-            if(adj[i][j] == 1) totalMarcado++;
-    m = totalMarcado / 2; // cada aresta aparece 2x na matriz simétrica
-}
-
-//exe12
-
-public int isCompleto() {
-    for(int i=0; i<n; i++)
-	{
-        for(int j=0; j<n; j++)
-		{
-            if(i != j && adj[i][j] == 0)
-			{
-                return 0; 
+    public int isCompleto() {
+        for(int i=0; i<n; i++)
+        {
+            for(int j=0; j<n; j++)
+            {
+                if(i != j && adj[i][j] == 0)
+                {
+                    return 0; 
+                }
             }
         }
+        return 1; 
     }
-    return 1; 
-}
 
 
-//exe14:  
-public TGrafoND complementar() {
-    TGrafoND comp = new TGrafoND(n);
-    for(int i=0; i<n; i++){
-        for(int j=0; j<n; j++){
-            if(i != j && adj[i][j] == 0){
-                comp.insereA(i, j);
+    //exe14:  
+    public TGrafoND complementar() {
+        TGrafoND comp = new TGrafoND(n);
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                if(i != j && adj[i][j] == 0){
+                    comp.insereA(i, j);
+                }
             }
         }
+        return comp;
     }
-    return comp;
+
+    //exe15: verifica a conexidade do grafo não dirigido
+	// (0 = conexo, 1 = desconexo), usando DFS com a Pilha
+	public int conexidade() {
+	    boolean visitado[] = new boolean[n];
+	    Pilha pilha = new Pilha(n); // capacidade = nº de vértices
+ 
+	    pilha.push(0);
+	    visitado[0] = true;
+	    int totalVisitados = 1;
+ 
+	    while (!pilha.isEmpty()) {
+	        int atual = pilha.pop();
+	        for (int j = 0; j < n; j++) {
+	            if (adj[atual][j] == 1 && !visitado[j]) {
+	                visitado[j] = true;
+	                totalVisitados++;
+	                pilha.push(j);
+	            }
+	        }
+	    }
+ 
+	    return (totalVisitados == n) ? 0 : 1;
+	}
 }
